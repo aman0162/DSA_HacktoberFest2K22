@@ -1,40 +1,39 @@
 class Solution {
 public:
-    bool isvalid(vector<vector<int>>& image, int sr, int sc, int color,int n,int m,int oldcolor)
-    {
-        if(sr>=0 && sc>=0 && sr<n && sc<m && image[sr][sc]==oldcolor )
-            return true;
-        else
-            return false;
-    }
-    void solve(vector<vector<int>>& image, int sr, int sc, int color,int n,int m,int oldcolor)
-    {
-            image[sr][sc] = color;
-        if(isvalid(image , sr+1 , sc , color , n , m, oldcolor))
-        {
-            solve(image , sr+1 , sc ,color , n , m, oldcolor);
-        }
-         if(isvalid(image , sr-1 , sc , color , n , m , oldcolor))
-        {
-            solve(image , sr-1 , sc , color , n ,  m, oldcolor);
-        }
-         if(isvalid(image , sr , sc+1 , color , n , m , oldcolor))
-        {
-            solve(image ,sr , sc+1 , color , n , m , oldcolor);
-        }
-         if(isvalid(image , sr ,sc-1 , color , n , m , oldcolor))
-        {
-            solve(image , sr , sc-1 , color , n , m, oldcolor);
-        }
-        
-    }
+    int old;
+    int n,m;
+    void dfs(vector<vector<int>>& v,int sr,int sc,int c,int old)
+	{
+		if(v[sr][sc]!=old)
+			return;
+		if(old==c)
+			return;
+
+		v[sr][sc]=c;
+		if(sr!=0)
+		{
+			dfs(v,sr-1,sc,c,old);
+		}
+		if(sc!=m-1)
+		{
+			dfs(v,sr,sc+1,c,old);
+		}
+		if(sr!=n-1)
+			dfs(v,sr+1,sc,c,old);
+		if(sc!=0)
+			dfs(v,sr,sc-1,c,old);
+	}
+    
+    
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
-        int n=image.size();
-        int m=image[0].size();
-        int oldcolor=image[sr][sc];
-        if(image[sr][sc]==color)
-            return image;
-        solve(image,sr,sc,color,n,m,oldcolor);
+        old=image[sr][sc];
+        n=image.size();
+        m=image[0].size();
+        dfs(image,sr,sc,color,old);
         return image;
     }
 };
+
+
+//Aman Agrahari(21 yrs)
+//https://leetcode.com/problems/flood-fill/
