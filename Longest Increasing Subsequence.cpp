@@ -1,26 +1,29 @@
 
 #include<bits/stdc++.h>
-#include <iostream>
-
 using namespace std;
 
-int lengthOfLIS(vector<int>& nums) {
-        vector<int> lis;
-        lis.push_back(nums[0]);
-        
-        for(int i=1;i<nums.size();i++){
-            
-            if(lis.back() < nums[i])
-                lis.push_back(nums[i]);
-            
-            else{
-                int it = lower_bound(lis.begin(), lis.end(), nums[i]) - lis.begin();
-                lis[it] = nums[i];
+    int solveTab(vector<int>&nums)
+    {
+        int n=nums.size();
+        vector<vector<int> >dp(n+1,vector<int>(n+1,0));
+        for(int curr=n-1;curr>=0;curr--)
+        {
+            for(int pre=curr-1;pre>=-1;pre--)
+            {
+                int include=0;
+                if(pre==-1 or nums[pre]<nums[curr])
+                    include=1+dp[curr+1][curr+1];
+                int exclude=dp[curr+1][pre+1];
+                dp[curr][pre+1]=max(include,exclude);
             }
             
         }
-        
-        return lis.size();
+        return dp[0][0];
+    }
+
+
+    int lengthOfLIS(vector<int>& nums) {
+        return solveTab(nums);
     }
 
 int main()
